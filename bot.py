@@ -7,10 +7,10 @@ import _private
 bot = telebot.TeleBot(_private.TOKEN)
 
 prices = [
-    [LabeledPrice(label='10 000 ⛽️', amount=10000)],
-    [LabeledPrice(label='25 000 ⛽️', amount=25000)],
-    [LabeledPrice(label='50 000 ⛽️', amount=50000)],
-    [LabeledPrice(label='100 000 ⛽️', amount=100000)]
+    [LabeledPrice(label='10 000 ⛽️', amount=25)],
+    [LabeledPrice(label='25 000 ⛽️', amount=75)],
+    [LabeledPrice(label='50 000 ⛽️', amount=125)],
+    [LabeledPrice(label='100 000 ⛽️', amount=275)]
 ]
 
 
@@ -53,8 +53,7 @@ def respond_to_text(message):
     if response['status_code'] == 'SUCCESS':
         bot.send_message(message.chat.id,
                          f"{response['response_message']}\n\n"
-                         f"⛽️ {response['spent_words']}/{mindgate.getBalance(message.chat.id)['data']}",
-                         parse_mode="Markdown")
+                         f"⛽️ {response['spent_words']}/{mindgate.getBalance(message.chat.id)['data']}")
     elif response['status_code'] == 'INSUFFICIENT_BALANCE':
         markup = types.InlineKeyboardMarkup()
         add_balance_button = types.InlineKeyboardButton('Buy ⛽️', callback_data='add_balance_buttons')
@@ -82,10 +81,10 @@ def callback_query_handler_change_model_button(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'add_balance_buttons')
 def callback_query_handler_add_balance_buttons(call):
     markup = types.InlineKeyboardMarkup()
-    button1 = types.InlineKeyboardButton('10 000 ⛽️ - 100₽', callback_data='add_balance_button_10000')
-    button2 = types.InlineKeyboardButton('25 000 ⛽️ - 250₽', callback_data='add_balance_button_25000')
-    button3 = types.InlineKeyboardButton('50 000 ⛽️ - 500₽', callback_data='add_balance_button_50000')
-    button4 = types.InlineKeyboardButton('100 000 ⛽️ - 1000₽', callback_data='add_balance_button_100000')
+    button1 = types.InlineKeyboardButton('10 000 ⛽️ - 25 ⭐️', callback_data='add_balance_button_10000')
+    button2 = types.InlineKeyboardButton('25 000 ⛽️ - 75 ⭐️', callback_data='add_balance_button_25000')
+    button3 = types.InlineKeyboardButton('50 000 ⛽️ - 125 ⭐️', callback_data='add_balance_button_50000')
+    button4 = types.InlineKeyboardButton('100 000 ⛽️ - 275 ⭐️', callback_data='add_balance_button_100000')
     markup.add(button1, button2, button3, button4, row_width=1)
     bot.edit_message_text(chat_id=call.message.chat.id,
                           message_id=call.message.message_id,
@@ -98,20 +97,12 @@ def callback_query_handler_add_balance_buttons(call):
 def callback_query_handler_add_balance_button_10000(call):
     bot.delete_message(call.message.chat.id, call.message.message_id)
     bot.send_invoice(chat_id=call.message.chat.id,
-                     title='Add balance',
+                     title='💸 Purchase',
                      description='Buy some ⛽️',
                      invoice_payload='add_balance_button_10000_done',
-                     provider_token=_private.YKASSA_TOKEN,
-                     currency='RUB',
+                     provider_token='',
+                     currency='XTR',
                      prices=prices[0])
-
-
-# add_balance_button_10000_done
-@bot.callback_query_handler(func=lambda call: call.data == 'add_balance_button_10000_done')
-def callback_query_handler_add_balance_button_10000_done(call):
-    mindgate.addBalance(call.message.chat.id, 10000)
-    bot.delete_message(call.message.chat.id, call.message.message_id)
-    bot.send_message(call.message.chat.id, '✅ 10 000 ⛽️ added!')
 
 
 # add_balance_button_25000
@@ -119,20 +110,12 @@ def callback_query_handler_add_balance_button_10000_done(call):
 def callback_query_handler_add_balance_button_25000(call):
     bot.delete_message(call.message.chat.id, call.message.message_id)
     bot.send_invoice(chat_id=call.message.chat.id,
-                     title='Add balance',
+                     title='💸 Purchase',
                      description='Buy some ⛽️',
                      invoice_payload='add_balance_button_25000_done',
-                     provider_token=_private.YKASSA_TOKEN,
-                     currency='RUB',
+                     provider_token='',
+                     currency='XTR',
                      prices=prices[1])
-
-
-# add_balance_button_25000_done
-@bot.callback_query_handler(func=lambda call: call.data == 'add_balance_button_25000_done')
-def callback_query_handler_add_balance_button_25000_done(call):
-    mindgate.addBalance(call.message.chat.id, 25000)
-    bot.delete_message(call.message.chat.id, call.message.message_id)
-    bot.send_message(call.message.chat.id, '✅ 25 000 ⛽️ added!')
 
 
 # add_balance_button_50000
@@ -140,20 +123,12 @@ def callback_query_handler_add_balance_button_25000_done(call):
 def callback_query_handler_add_balance_button_50000(call):
     bot.delete_message(call.message.chat.id, call.message.message_id)
     bot.send_invoice(chat_id=call.message.chat.id,
-                     title='Add balance',
+                     title='💸 Purchase',
                      description='Buy some ⛽️',
                      invoice_payload='add_balance_button_50000_done',
-                     provider_token=_private.YKASSA_TOKEN,
-                     currency='RUB',
+                     provider_token='',
+                     currency='XTR',
                      prices=prices[2])
-
-
-# add_balance_button_50000_done
-@bot.callback_query_handler(func=lambda call: call.data == 'add_balance_button_50000_done')
-def callback_query_handler_add_balance_button_50000_done(call):
-    mindgate.addBalance(call.message.chat.id, 50000)
-    bot.delete_message(call.message.chat.id, call.message.message_id)
-    bot.send_message(call.message.chat.id, '✅ 50 000 ⛽️ added!')
 
 
 # add_balance_button_100000
@@ -161,20 +136,44 @@ def callback_query_handler_add_balance_button_50000_done(call):
 def callback_query_handler_add_balance_button_100000(call):
     bot.delete_message(call.message.chat.id, call.message.message_id)
     bot.send_invoice(chat_id=call.message.chat.id,
-                     title='Add balance',
+                     title='💸 Purchase',
                      description='Buy some ⛽️',
                      invoice_payload='add_balance_button_100000_done',
-                     provider_token=_private.YKASSA_TOKEN,
-                     currency='RUB',
+                     provider_token='',
+                     currency='XTR',
                      prices=prices[3])
 
 
-# add_balance_button_100000_done
-@bot.callback_query_handler(func=lambda call: call.data == 'add_balance_button_100000_done')
-def callback_query_handler_add_balance_button_100000_done(call):
-    mindgate.addBalance(call.message.chat.id, 100000)
-    bot.delete_message(call.message.chat.id, call.message.message_id)
-    bot.send_message(call.message.chat.id, '✅ 100 000 ⛽️ added!')
+# answer_pre_checkout_query
+@bot.pre_checkout_query_handler(func=lambda query: True)
+def checkout(pre_checkout_query):
+    bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True,
+                                  error_message="Aliens tried to steal your card's CVV, but we successfully protected"
+                                                " your credentials, try to pay again in a few minutes, we need a small rest.")
+
+
+# add_balance_button_*_done
+@bot.message_handler(content_types=['successful_payment'])
+def process_payment(message):
+    payload = message.successful_payment.invoice_payload
+    if payload == "add_balance_button_10000_done":
+        mindgate.addBalance(message.chat.id, 10000)
+        bot.delete_message(message.chat.id, message.message_id)
+        bot.send_message(message.chat.id, '✅ 10 000 ⛽️ added!')
+    if payload == "add_balance_button_25000_done":
+        mindgate.addBalance(message.chat.id, 25000)
+        bot.delete_message(message.chat.id, message.message_id)
+        bot.send_message(message.chat.id, '✅ 25 000 ⛽️ added!')
+    if payload == "add_balance_button_50000_done":
+        mindgate.addBalance(message.chat.id, 50000)
+        bot.delete_message(message.chat.id, message.message_id)
+        bot.send_message(message.chat.id, '✅ 50 000 ⛽️ added!')
+    if payload == "add_balance_button_100000_done":
+        mindgate.addBalance(message.chat.id, 100000)
+        bot.delete_message(message.chat.id, message.message_id)
+        bot.send_message(message.chat.id, '✅ 100 000 ⛽️ added!')
+    else:
+        print("Unknown payload")
 
 
 # change_model_button_gpt_4o
